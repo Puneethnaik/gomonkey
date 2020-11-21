@@ -28,6 +28,19 @@ const (
 	LBRACE = "{"
 	RBRACE = "}"
 
-	FUNCTION = "FUNCTION"
-	LET      = "LET"
+	FUNCTION = "func"
+	LET      = "let"
 )
+
+var keywords = map[string]TokenType{
+	"func": FUNCTION,
+	"let":  LET,
+}
+
+// LookupIdent function to lookup whether ident matches one of the keywords of the language.
+func LookupIdent(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENTIFIER
+}
