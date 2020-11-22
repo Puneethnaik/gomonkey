@@ -35,7 +35,13 @@ func (l *Lexer) NextToken() token.Token {
 	l.eatWhiteSpace()
 	switch l.ch {
 	case '=':
-		tok = newToken(token.ASSIGN, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.EQ, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.ASSIGN, l.ch)
+		}
 	case ';':
 		tok = newToken(token.SEMICOLON, l.ch)
 	case '(':
@@ -53,7 +59,13 @@ func (l *Lexer) NextToken() token.Token {
 	case '-':
 		tok = newToken(token.MINUS, l.ch)
 	case '!':
-		tok = newToken(token.BANG, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.NOT_EQ, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.BANG, l.ch)
+		}
 	case '/':
 		tok = newToken(token.SLASH, l.ch)
 	case '*':
@@ -110,7 +122,17 @@ func isLetter(ch byte) bool {
 }
 
 func (l *Lexer) eatWhiteSpace() {
-	if l.ch == ' ' || l.ch == '\n' || l.ch == '\t' || l.ch == '\r' {
+	for l.ch == ' ' || l.ch == '\n' || l.ch == '\t' || l.ch == '\r' {
 		l.readChar()
 	}
+}
+
+func (l *Lexer) peekChar() byte {
+	var ch byte
+	if l.readPosition >= len(l.input) {
+		ch = 0
+	} else {
+		ch = l.input[l.readPosition]
+	}
+	return ch
 }
