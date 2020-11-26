@@ -1,3 +1,4 @@
 {
-    "go.gopath": "/home/puneeth/Desktop/gomonkey"
+    "go.gopath": "/home/puneeth/Desktop/gomonkey",
+    "go.useLanguageServer": true
 }
